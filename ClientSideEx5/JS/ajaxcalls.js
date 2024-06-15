@@ -7,6 +7,7 @@
         contentType: "application/json",
         dataType: "json",
         success: successCB,
-        error: errorCB
+        error: errorCB,
+        async:false
     });
 }

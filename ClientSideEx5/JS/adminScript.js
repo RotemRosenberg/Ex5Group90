@@ -169,7 +169,7 @@ function renderSpecificCourse(course) {
                         <p>Rating: ${course.rating.toFixed(2)}</p>
                         <p>Number of Reviews: ${course.numberOfReviews}</p>
                         <p>Last Update Date: ${course.lastUpdate}</p>
-                        <p>Duration: ${course.duration}</p>
+                        <p>Duration: ${course.duration.toFixed(2) }</p>
                         <a href="https://udemy.com${course.url}" target="_blank">View Course</a>
                                    `;
         courseDiv.innerHTML = html;

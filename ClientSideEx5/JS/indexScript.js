@@ -1,7 +1,8 @@
 ﻿$(document).ready(function () {
     GetInstructors();
     GetCourses();
-    $("#backBTN").click(GetCourses);
+    Top5();
+    $("#backBTN").click(ReloadMainPage);
     if (localStorage.getItem("loggedUser")) {
         $("#loginBTN").hide();
         $("#registerBTN").hide();
@@ -28,13 +29,91 @@
     });
     $("#logoutBTN").click(Logout);
 });
+
+function ReloadMainPage() {
+    GetCourses();
+    Top5();
+}
 const createUserCourse = (userId, courseId) => ({ userId, courseId });
 //-------------------------------------------------------//
 //----------------Render Courses and Instructors---------//
 //-------------------------------------------------------//
+function Top5() {
+    let api = `https://localhost:7020/api/Course/Top5Courses`;
+    ajaxCall("GET", api, "", Top5SCBF, Top5ECBF);
+}
+function Top5SCBF(result) {
+    RenderTop5Courses(result);
+    console.log(result);
+}
 
+function Top5ECBF(err) {
+    console.log(err);
+
+}
+function RenderTop5Courses(data) {
+
+    document.getElementById('top5').innerHTML = '';
+    const titleDiv = document.getElementById('titleTop5');
+    titleDiv.textContent = 'Top 5 Courses';
+    for (let course of data) {
+        let api = `https://localhost:7020/api/Course/title/`+course.name;
+        ajaxCall("GET", api, "", CourseSCBF, CourseECBF);
+        localStorage.setItem("Top5_" + course.id, course.registeredUsers)
+    }
+}
+function CourseSCBF(result) {
+    renderSpecificCourse(result);
+    console.log(result);
+}
+
+function CourseECBF(err) {
+    console.log(err);
+
+}
+function renderSpecificCourse(course) {
+    const container = document.getElementById('top5');
+    const courseDiv = document.createElement('div');
+    courseDiv.id = "courseDiv";
+    const html = `
+                        <img src="${course.imageReference}" alt="${course.title}">
+                        <h2>${course.title}</h2>
+                        <p>Instructor: ${localStorage.getItem(course.instructorsId)}</p>
+                        <p>Rating: ${course.rating.toFixed(2)}</p>
+                        <p>Number of Reviews: ${course.numberOfReviews}</p>
+                        <p>Last Update Date: ${course.lastUpdate}</p>
+                        <p>Duration: ${course.duration.toFixed(2)}</p>
+                        <p style="color:red;"> Registered Users: ${localStorage.getItem("Top5_" + course.id)}</p>
+                        <a href="https://udemy.com${course.url}" target="_blank">View Course</a>
+                                   `;
+    courseDiv.innerHTML = html;
+    let btnInstructor = document.createElement('button');
+    btnInstructor.innerText = 'Show more courses of this instructor';
+    btnInstructor.onclick = function () {
+
+        let api = `https://localhost:7020/api/Instructor/` + course.instructorsId;
+        ajaxCall("GET", api, "", getICSCBF, getICECBF);
+
+
+    }
+    let btnAdd = document.createElement('button');
+    btnAdd.innerText = 'AddCourse';
+    btnAdd.onclick = function () {
+        if (localStorage.getItem("loggedUser") != 1 && localStorage.getItem("loggedUser")) {
+
+            let UserCourse = createUserCourse(localStorage.getItem("loggedUser"), course.id);
+            let api = `https://localhost:7020/api/UserCourse`;
+            ajaxCall("POST", api, JSON.stringify(UserCourse), postCourseSCBF, postCourseECBF);
+        }
+        else alert("please login")
+    }
+    courseDiv.appendChild(btnInstructor);
+    courseDiv.appendChild(btnAdd);
+    container.appendChild(courseDiv);
+    localStorage.removeItem("Top5_" + course.id);
+}
 function GetCourses() {
-    let api = `https://194.90.158.74/cgroup90/test2/tar1/api/Course`;
+    let api = `https://localhost:7020/api/Course`;
     ajaxCall("GET", api, "", getSCBF, getECBF);
 }
 function getSCBF(result) {
@@ -47,8 +126,8 @@ function getECBF(err) {
 
 }
 
-function GetInstructors(id) {
-    let api = `https://194.90.158.74/cgroup90/test2/tar1/api/Instructor`;
+function GetInstructors() {
+    let api = `https://localhost:7020/api/Instructor`;
      ajaxCall("GET", api, "",getISCBF, getIECBF);
 }
 function getISCBF(result) {
@@ -92,7 +171,7 @@ function RenderCourses(data)
         btnInstructor.innerText = 'Show more courses of this instructor';
         btnInstructor.onclick = function () {
 
-            let api = `https://194.90.158.74/cgroup90/test2/tar1/api/Instructor/` + course.instructorsId;
+            let api = `https://localhost:7020/api/Instructor/` + course.instructorsId;
             ajaxCall("GET", api, "", getICSCBF, getICECBF);
 
 
@@ -103,7 +182,7 @@ function RenderCourses(data)
             if (localStorage.getItem("loggedUser") != 1 && localStorage.getItem("loggedUser")) {
             
             let UserCourse = createUserCourse(localStorage.getItem("loggedUser"), course.id);
-                let api = `https://194.90.158.74/cgroup90/test2/tar1/api/UserCourse`;
+                let api = `https://localhost:7020/api/UserCourse`;
             ajaxCall("POST", api, JSON.stringify(UserCourse), postCourseSCBF, postCourseECBF);
             }
         else alert("please login")
@@ -136,6 +215,8 @@ function postCourseECBF(err) {
 function RenderInstructorCourses(courses) {
     GetInstructors();
     document.getElementById('containerCourses').innerHTML = '';
+    document.getElementById('titleTop5').innerHTML = '';
+    document.getElementById('top5').innerHTML = '';
     const container = document.getElementById('containerInstructorCourses');
 
     //btn back to main

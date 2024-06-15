@@ -5,7 +5,7 @@
     background-color: #f4f4f4;
 }
 
-#containerCourses, #containerInstructorCourses, #containerInstructors {
+#containerCourses, #containerInstructorCourses, #containerInstructors, #top5 {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -168,10 +168,6 @@ h1 {
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 10px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     background-color: #f9f9f9;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 400px;
@@ -218,3 +214,52 @@ h1 {
     #updateCourseBTN:hover {
         background-color: #45a049;
     }
+/* CSS עיצוב הטבלה */
+#adminTable_wrapper {
+    width: 100%;
+    margin: 0 auto;
+}
+
+#adminTable {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+}
+
+    #adminTable th, #adminTable td {
+        padding: 8px;
+        border: 1px solid #ddd;
+    }
+
+    #adminTable img {
+        max-width: 50px;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+
+    #adminTable a {
+        text-decoration: none;
+        color: blue;
+    }
+
+        #adminTable a:hover {
+            text-decoration: underline;
+        }
+
+    #adminTable input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+    }
+/* CSS לשורה הראשונה */
+#courseTbody tr:first-of-type {
+    background-color: #f0f0f0; /* צבע הרקע של שורה הראשונה */
+    font-weight: bold; /* עיצוב טקסט של שורה הראשונה */
+}
+#containerEditCourse {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
