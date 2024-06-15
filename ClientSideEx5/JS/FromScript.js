@@ -3,13 +3,14 @@
     $("#registerForm").submit(Register);
     $("#loginForm").submit(Login);
 });
-
-const createUser = (id, name, email, password, isAdmin, isActive) => ({ id, name, email, password, isAdmin, isActive });
+function createUser(id, name, email, password, isAdmin, isActive) {
+    return { id, name, email, password, isAdmin, isActive };
+}
 
 //---------login---------//
 function Login() {
 
-    let api = `https://194.90.158.74/cgroup90/test2/tar1/api/User/login?email=` + encodeURIComponent($('#emailTB').val());
+    let api = `https://localhost:7020/api/User/login?email=` + encodeURIComponent($('#emailTB').val());
     ajaxCall("POST", api, JSON.stringify($('#passwordTB').val()), postLSCBF, postLECBF);
     return false;
 }
@@ -36,7 +37,7 @@ function postLECBF(err) {
 
 function Register() {
     let newUser = createUser(0, $('#nameTB').val(), $('#emailTB').val(), $('#passwordTB').val(), false, true);
-    let api = `https://194.90.158.74/cgroup90/test2/tar1/api/User/register`;
+    let api = `https://localhost:7020/api/User/register`;
     ajaxCall("POST", api, JSON.stringify(newUser), postRSCBF, postRECBF);
     return false;
 

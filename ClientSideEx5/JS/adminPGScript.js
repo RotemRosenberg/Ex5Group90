@@ -5,15 +5,11 @@ function createCourse(id, title, url, rating, numberOfReviews, instructorsId, im
     return { id, title, url, rating, numberOfReviews, instructorsId, imageReference, duration, lastUpdate };
 }
 $(document).ready(function () {
-
     GetAdminCourses();
     InstructorSelect();
+
     $("#insertCourseBTN").click(function () {
         insertCourse();
-    });
-    $("#editCourseForm").submit(function (e) {
-        e.preventDefault();
-        submitInsertCourse();
     });
 });
 //add course
@@ -23,6 +19,10 @@ function insertCourse() {
     document.getElementById("labelInstructorID").style.display = "block";
     document.getElementById("instructorIDTB").style.display = "block";
     $('#instructorIDTB, #fileURLTB').attr('required', 'required');
+    $("#editCourseForm").submit(function (e) {
+        e.preventDefault();
+        submitInsertCourse();
+    });
 }
 //render all instructor to select option for insert course
 function InstructorSelect() {
@@ -36,9 +36,6 @@ function InstructorSelect() {
 }
 
 function submitInsertCourse() {
-    a();
-}
-function a() {
     var data = new FormData();
     var files = $("#fileURLTB").get(0).files;
 
@@ -58,7 +55,9 @@ function a() {
         processData: false,
         data: data,
         success: showImages,
-        error: error
+        error: error,
+        async: false
+
     });
     console.log(data);
 }
@@ -66,13 +65,14 @@ function showImages(data) {
 
     console.log('https://localhost:7020/images/' + data);
     localStorage.setItem('img1', 'https://localhost:7020/images/' + data)
-    b();
+    Insert();
 }
 
 function error(data) {
     console.log(data);
+    localStorage.removeItem('img1')
 }
-function b() {
+function Insert() {
     let newCourse = createCourse(0, $("#courseTitleTB").val(), $("#courseURLTB").val(), 0, 0, parseInt($("#instructorIDTB").val()), localStorage.getItem('img1'), parseFloat($("#courseDuration").val()), 'd');
     console.log(newCourse);
     let api = `https://localhost:7020/api/Course`;
@@ -84,10 +84,8 @@ function insertSCBF(result) {
     AddAdminCourse(result);
     editCourseForm.style.display = "none";
     document.getElementById('editCourseForm').reset();
-    localStorage.removeItem('img1')
+    localStorage.removeItem('img1');
     location.reload();
-
-
 }
 function AddAdminCourse(course) {
     let adminCourse = createUserCourse(1, course.id)
@@ -125,7 +123,7 @@ function getECBF(err) {
 
 function RenderCourses(data) {
 
-    const container = document.getElementById('courseTbody');
+    const container = document.getElementsByTagName('tbody')[0];
     for (let course of data) {
         const row = document.createElement('tr');
         //image
@@ -222,14 +220,13 @@ function RenderCourses(data) {
         };
         btnCol.appendChild(btn);
         row.appendChild(btnCol);
-
-
         container.appendChild(row);
     }
-
-
-    $('#adminTable').DataTable();
-}
+    new DataTable('#example', {
+        paging: false,
+        scrollCollapse: true,
+        scrollY: '600px'
+    }); }
 ///quick edit
 function QEditSCBF(result) {
     console.log("Quick Edit successful:", result);
@@ -277,22 +274,58 @@ function renderSpecificCourse(course) {
     container.appendChild(courseDiv);
 }
 function submitUpdateCourse(course) {
-    let editCourse = createCourse(course.id, $("#courseTitleTB").val(), $("#courseURLTB").val(), course.rating, course.numberOfReviews, course.instructorsId, $("#imageURLTB").val(), parseFloat($("#courseDuration").val()), course.lastUpdate);
+    uploadImg();
+    let editCourse = createCourse(course.id, $("#courseTitleTB").val(), $("#courseURLTB").val(), course.rating, course.numberOfReviews, course.instructorsId, localStorage.getItem('img1'), parseFloat($("#courseDuration").val()), course.lastUpdate);
     let api = 'https://localhost:7020/api/Course/userUpdate';
     ajaxCall("PUT", api, JSON.stringify(editCourse), updateSCBF, updateECBF);
 
 }
+function uploadImg() {
 
+    var data = new FormData();
+    var files = $("#fileURLTB").get(0).files;
+
+    // Add the uploaded file to the form data collection  
+    if (files.length > 0) {
+        for (f = 0; f < files.length; f++) {
+            data.append("files", files[f]);
+        }
+    }
+
+    let apiImg = "https://localhost:7020/api/Upload";
+    // Ajax upload  
+    $.ajax({
+        type: "POST",
+        url: apiImg,
+        contentType: false,
+        processData: false,
+        data: data,
+        success: showImagesEdit,
+        error: error2,
+        async: false
+    });
+    console.log(data);
+}
+function showImagesEdit(data) {
+    console.log('https://localhost:7020/images/' + data);
+    localStorage.setItem('img1', 'https://localhost:7020/images/' + data)
+}
+
+function error2(data) {
+    console.log(data);
+    localStorage.removeItem('img1')
+}
 function updateSCBF(result) {
     console.log("Update successful:", result);
     editCourseForm.style.display = "none";
     alert("Course updated successfully!");
     document.getElementById('editCourseForm').reset();
-    GetAdminCourses();
+    localStorage.removeItem('img1');
     location.reload();
 }
 
 function updateECBF(err) {
     console.log("Update failed:", err);
     alert("Failed to update the course.");
+    localStorage.removeItem('img1')
 }

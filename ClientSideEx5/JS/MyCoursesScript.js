@@ -8,7 +8,7 @@
 //--------------------Render User Course-----------------//
 //-------------------------------------------------------//
 function RenderUserCourses() {
-    let api = `https://194.90.158.74/cgroup90/test2/tar1/api/UserCourse/` + localStorage.getItem("loggedUser");
+    let api = `https://localhost:7020/api/UserCourse/` + localStorage.getItem("loggedUser");
     ajaxCall("GET", api, "", getSCBF, getECBF)
 }
 
@@ -27,9 +27,10 @@ function RenderCourses(data) {
     const container = document.getElementById('containerCourses');
     container.innerHTML = "";
     for (let course of data) {
-        const courseDiv = document.createElement('div');
-        courseDiv.id = "courseDiv";
-        const html = `
+        if (course.isActive) {
+            const courseDiv = document.createElement('div');
+            courseDiv.id = "courseDiv";
+            const html = `
                         <img src="${course.imageReference}" alt="${course.title}">
                         <h2>${course.title}</h2>
                         <p>Instructor: ${localStorage.getItem(course.instructorsId)}</p>
@@ -39,9 +40,10 @@ function RenderCourses(data) {
                         <p>Duration: ${course.duration.toFixed(2)}</p>
                         <a href="https://udemy.com${course.url}" target="_blank">View Course</a>
                                    `;
-        courseDiv.innerHTML = html;      
-      
-        container.appendChild(courseDiv);
+            courseDiv.innerHTML = html;
+
+            container.appendChild(courseDiv);
+        }
     }
 }
 
@@ -55,7 +57,7 @@ function GetByRatingRange() {
     if (minRating != "" && maxRating != "") {
 
         if (!isNaN(minRating) && !isNaN(maxRating)) {
-            let api = `https://194.90.158.74/cgroup90/test2/tar1/api/UserCourse/GetByRatingRange/${localStorage.getItem("loggedUser")}?minRating=${minRating}&maxRating=${maxRating}`;
+            let api = `https://localhost:7020/api/UserCourse/GetByRatingRange/${localStorage.getItem("loggedUser")}?minRating=${minRating}&maxRating=${maxRating}`;
             ajaxCall("GET", api, "", ratingSCBF, ratingECBF);
         }
         else
@@ -83,7 +85,7 @@ function GetByDurationRange() {
     {
 
         if (!isNaN(minDuration) && !isNaN(maxDuration)) {
-            let api = `https://194.90.158.74/cgroup90/test2/tar1/api/UserCourse/GetByDurationRange/${localStorage.getItem("loggedUser")}?minDuration=${minDuration}&maxDuration=${maxDuration}`
+            let api = `https://localhost:7020/api/UserCourse/GetByDurationRange/${localStorage.getItem("loggedUser")}?minDuration=${minDuration}&maxDuration=${maxDuration}`
             ajaxCall("GET", api, "", durationSCBF, durationECBF);
         }
         else

@@ -74,8 +74,9 @@ function CourseECBF(err) {
 function renderSpecificCourse(course) {
     const container = document.getElementById('top5');
     const courseDiv = document.createElement('div');
-    courseDiv.id = "courseDiv";
-    const html = `
+    if (course.isActive) {
+        courseDiv.id = "courseDiv";
+        const html = `
                         <img src="${course.imageReference}" alt="${course.title}">
                         <h2>${course.title}</h2>
                         <p>Instructor: ${localStorage.getItem(course.instructorsId)}</p>
@@ -86,30 +87,31 @@ function renderSpecificCourse(course) {
                         <p style="color:red;"> Registered Users: ${localStorage.getItem("Top5_" + course.id)}</p>
                         <a href="https://udemy.com${course.url}" target="_blank">View Course</a>
                                    `;
-    courseDiv.innerHTML = html;
-    let btnInstructor = document.createElement('button');
-    btnInstructor.innerText = 'Show more courses of this instructor';
-    btnInstructor.onclick = function () {
+        courseDiv.innerHTML = html;
+        let btnInstructor = document.createElement('button');
+        btnInstructor.innerText = 'Show more courses of this instructor';
+        btnInstructor.onclick = function () {
 
-        let api = `https://localhost:7020/api/Instructor/` + course.instructorsId;
-        ajaxCall("GET", api, "", getICSCBF, getICECBF);
+            let api = `https://localhost:7020/api/Instructor/` + course.instructorsId;
+            ajaxCall("GET", api, "", getICSCBF, getICECBF);
 
 
-    }
-    let btnAdd = document.createElement('button');
-    btnAdd.innerText = 'AddCourse';
-    btnAdd.onclick = function () {
-        if (localStorage.getItem("loggedUser") != 1 && localStorage.getItem("loggedUser")) {
-
-            let UserCourse = createUserCourse(localStorage.getItem("loggedUser"), course.id);
-            let api = `https://localhost:7020/api/UserCourse`;
-            ajaxCall("POST", api, JSON.stringify(UserCourse), postCourseSCBF, postCourseECBF);
         }
-        else alert("please login")
+        let btnAdd = document.createElement('button');
+        btnAdd.innerText = 'AddCourse';
+        btnAdd.onclick = function () {
+            if (localStorage.getItem("loggedUser") != 1 && localStorage.getItem("loggedUser")) {
+
+                let UserCourse = createUserCourse(localStorage.getItem("loggedUser"), course.id);
+                let api = `https://localhost:7020/api/UserCourse`;
+                ajaxCall("POST", api, JSON.stringify(UserCourse), postCourseSCBF, postCourseECBF);
+            }
+            else alert("please login")
+        }
+        courseDiv.appendChild(btnInstructor);
+        courseDiv.appendChild(btnAdd);
+        container.appendChild(courseDiv);
     }
-    courseDiv.appendChild(btnInstructor);
-    courseDiv.appendChild(btnAdd);
-    container.appendChild(courseDiv);
     localStorage.removeItem("Top5_" + course.id);
 }
 function GetCourses() {
@@ -154,42 +156,44 @@ function RenderCourses(data)
     const titleDiv = document.getElementById('title');
     titleDiv.textContent = 'Udemy Courses';
     for (let course of data) {
-        const courseDiv = document.createElement('div');
-        courseDiv.id = "courseDiv";
-        const html = `
+        if (course.isActive) {
+            const courseDiv = document.createElement('div');
+            courseDiv.id = "courseDiv";
+            const html = `
                         <img src="${course.imageReference}" alt="${course.title}">
                         <h2>${course.title}</h2>
-                        <p>Instructor: ${localStorage.getItem(course.instructorsId) }</p>
+                        <p>Instructor: ${localStorage.getItem(course.instructorsId)}</p>
                         <p>Rating: ${course.rating.toFixed(2)}</p>
                         <p>Number of Reviews: ${course.numberOfReviews}</p>
                         <p>Last Update Date: ${course.lastUpdate}</p>
                         <p>Duration: ${course.duration.toFixed(2)}</p>
                         <a href="https://udemy.com${course.url}" target="_blank">View Course</a>
                                    `;
-        courseDiv.innerHTML = html;
-        let btnInstructor = document.createElement('button');
-        btnInstructor.innerText = 'Show more courses of this instructor';
-        btnInstructor.onclick = function () {
+            courseDiv.innerHTML = html;
+            let btnInstructor = document.createElement('button');
+            btnInstructor.innerText = 'Show more courses of this instructor';
+            btnInstructor.onclick = function () {
 
-            let api = `https://localhost:7020/api/Instructor/` + course.instructorsId;
-            ajaxCall("GET", api, "", getICSCBF, getICECBF);
+                let api = `https://localhost:7020/api/Instructor/` + course.instructorsId;
+                ajaxCall("GET", api, "", getICSCBF, getICECBF);
 
 
-        }
-        let btnAdd = document.createElement('button');
-        btnAdd.innerText = 'AddCourse';
-        btnAdd.onclick = function () {
-            if (localStorage.getItem("loggedUser") != 1 && localStorage.getItem("loggedUser")) {
-            
-            let UserCourse = createUserCourse(localStorage.getItem("loggedUser"), course.id);
-                let api = `https://localhost:7020/api/UserCourse`;
-            ajaxCall("POST", api, JSON.stringify(UserCourse), postCourseSCBF, postCourseECBF);
             }
-        else alert("please login")
+            let btnAdd = document.createElement('button');
+            btnAdd.innerText = 'AddCourse';
+            btnAdd.onclick = function () {
+                if (localStorage.getItem("loggedUser") != 1 && localStorage.getItem("loggedUser")) {
+
+                    let UserCourse = createUserCourse(localStorage.getItem("loggedUser"), course.id);
+                    let api = `https://localhost:7020/api/UserCourse`;
+                    ajaxCall("POST", api, JSON.stringify(UserCourse), postCourseSCBF, postCourseECBF);
+                }
+                else alert("please login")
+            }
+            courseDiv.appendChild(btnInstructor);
+            courseDiv.appendChild(btnAdd);
+            container.appendChild(courseDiv);
         }
-        courseDiv.appendChild(btnInstructor);
-        courseDiv.appendChild(btnAdd);
-        container.appendChild(courseDiv);
     }
 }
 function getICSCBF(result) {

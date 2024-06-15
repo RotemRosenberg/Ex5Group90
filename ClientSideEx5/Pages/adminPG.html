@@ -4,18 +4,17 @@
     <meta charset="utf-8" />
     <title>Admin</title>
     <link href="../CSS/StyleSheet.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.8/css/dataTables.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="../JS/ajaxcalls.js"></script>
-    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+    <link href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" rel="stylesheet">
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js" type="text/javascript"></script>
     <script src="../JS/adminPGScript.js"></script>
 </head>
 <body>
     <h1>Admin Page</h1>
     <button class="btnStyle" id="insertCourseBTN">Insert Course</button>
-    <button class="btnStyle" onclick="location.href='index.html';">Back</button>
     <div id="containerTable">
-        <table id="adminTable">
+        <table id="example" class="hover" style="width:100%">
             <thead>
                 <tr>
                     <th>Image</th>
@@ -32,7 +31,7 @@
                     <th>Edit</th>
                 </tr>
             </thead>
-            <tbody id="courseTbody">   </tbody>
+            <tbody>   </tbody>
         </table>
     </div>
     <div id="containerEditCourse">
@@ -58,5 +57,7 @@
             <button id="updateCourseBTN" type="submit" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Update Course</button>
         </form>
     </div>
+    <button class="btnStyle" onclick="location.href='index.html';">Back</button>
+
 </body>
 </html>

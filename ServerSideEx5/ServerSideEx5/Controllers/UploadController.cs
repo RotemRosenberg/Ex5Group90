@@ -25,7 +25,21 @@ namespace ServerSideEx5.Controllers
         {
             return "value";
         }
+        // GET api/<UploadController>/exists/{fileName}
+        [HttpGet("exists/{fileName}")]
+        public IActionResult FileExists(string fileName)
+        {
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "uploadedFiles", fileName);
 
+            if (System.IO.File.Exists(path))
+            {
+                return Ok(true);
+            }
+            else
+            {
+                return Ok(false);
+            }
+        }
         // POST api/<UploadController>
         [HttpPost]
         public async Task<IActionResult> Post([FromForm] List<IFormFile> files)
