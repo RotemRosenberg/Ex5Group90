@@ -39,7 +39,7 @@ const createUserCourse = (userId, courseId) => ({ userId, courseId });
 //----------------Render Courses and Instructors---------//
 //-------------------------------------------------------//
 function Top5() {
-    let api = `https://localhost:7020/api/Course/Top5Courses`;
+    let api = `https://194.90.158.74/cgroup90/test2/tar1/api/Course/Top5Courses`;
     ajaxCall("GET", api, "", Top5SCBF, Top5ECBF);
 }
 function Top5SCBF(result) {
@@ -57,9 +57,9 @@ function RenderTop5Courses(data) {
     const titleDiv = document.getElementById('titleTop5');
     titleDiv.textContent = 'Top 5 Courses';
     for (let course of data) {
-        let api = `https://localhost:7020/api/Course/title/`+course.name;
-        ajaxCall("GET", api, "", CourseSCBF, CourseECBF);
         localStorage.setItem("Top5_" + course.id, course.registeredUsers)
+        let api = `https://194.90.158.74/cgroup90/test2/tar1/api/Course/title/`+course.name;
+        ajaxCall("GET", api, "", CourseSCBF, CourseECBF);
     }
 }
 function CourseSCBF(result) {
@@ -92,7 +92,7 @@ function renderSpecificCourse(course) {
         btnInstructor.innerText = 'Show more courses of this instructor';
         btnInstructor.onclick = function () {
 
-            let api = `https://localhost:7020/api/Instructor/` + course.instructorsId;
+            let api = `https://194.90.158.74/cgroup90/test2/tar1/api/Instructor/` + course.instructorsId;
             ajaxCall("GET", api, "", getICSCBF, getICECBF);
 
 
@@ -103,7 +103,7 @@ function renderSpecificCourse(course) {
             if (localStorage.getItem("loggedUser") != 1 && localStorage.getItem("loggedUser")) {
 
                 let UserCourse = createUserCourse(localStorage.getItem("loggedUser"), course.id);
-                let api = `https://localhost:7020/api/UserCourse`;
+                let api = `https://194.90.158.74/cgroup90/test2/tar1/api/UserCourse`;
                 ajaxCall("POST", api, JSON.stringify(UserCourse), postCourseSCBF, postCourseECBF);
             }
             else alert("please login")
@@ -115,7 +115,7 @@ function renderSpecificCourse(course) {
     localStorage.removeItem("Top5_" + course.id);
 }
 function GetCourses() {
-    let api = `https://localhost:7020/api/Course`;
+    let api = `https://194.90.158.74/cgroup90/test2/tar1/api/Course`;
     ajaxCall("GET", api, "", getSCBF, getECBF);
 }
 function getSCBF(result) {
@@ -129,7 +129,7 @@ function getECBF(err) {
 }
 
 function GetInstructors() {
-    let api = `https://localhost:7020/api/Instructor`;
+    let api = `https://194.90.158.74/cgroup90/test2/tar1/api/Instructor`;
      ajaxCall("GET", api, "",getISCBF, getIECBF);
 }
 function getISCBF(result) {
@@ -174,7 +174,7 @@ function RenderCourses(data)
             btnInstructor.innerText = 'Show more courses of this instructor';
             btnInstructor.onclick = function () {
 
-                let api = `https://localhost:7020/api/Instructor/` + course.instructorsId;
+                let api = `https://194.90.158.74/cgroup90/test2/tar1/api/Instructor/` + course.instructorsId;
                 ajaxCall("GET", api, "", getICSCBF, getICECBF);
 
 
@@ -185,7 +185,7 @@ function RenderCourses(data)
                 if (localStorage.getItem("loggedUser") != 1 && localStorage.getItem("loggedUser")) {
 
                     let UserCourse = createUserCourse(localStorage.getItem("loggedUser"), course.id);
-                    let api = `https://localhost:7020/api/UserCourse`;
+                    let api = `https://194.90.158.74/cgroup90/test2/tar1/api/UserCourse`;
                     ajaxCall("POST", api, JSON.stringify(UserCourse), postCourseSCBF, postCourseECBF);
                 }
                 else alert("please login")

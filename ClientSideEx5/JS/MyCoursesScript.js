@@ -8,7 +8,7 @@
 //--------------------Render User Course-----------------//
 //-------------------------------------------------------//
 function RenderUserCourses() {
-    let api = `https://localhost:7020/api/UserCourse/` + localStorage.getItem("loggedUser");
+    let api = `https://194.90.158.74/cgroup90/test2/tar1/api/UserCourse/` + localStorage.getItem("loggedUser");
     ajaxCall("GET", api, "", getSCBF, getECBF)
 }
 
@@ -57,7 +57,7 @@ function GetByRatingRange() {
     if (minRating != "" && maxRating != "") {
 
         if (!isNaN(minRating) && !isNaN(maxRating)) {
-            let api = `https://localhost:7020/api/UserCourse/GetByRatingRange/${localStorage.getItem("loggedUser")}?minRating=${minRating}&maxRating=${maxRating}`;
+            let api = `https://194.90.158.74/cgroup90/test2/tar1/api/UserCourse/GetByRatingRange/${localStorage.getItem("loggedUser")}?minRating=${minRating}&maxRating=${maxRating}`;
             ajaxCall("GET", api, "", ratingSCBF, ratingECBF);
         }
         else
@@ -85,7 +85,7 @@ function GetByDurationRange() {
     {
 
         if (!isNaN(minDuration) && !isNaN(maxDuration)) {
-            let api = `https://localhost:7020/api/UserCourse/GetByDurationRange/${localStorage.getItem("loggedUser")}?minDuration=${minDuration}&maxDuration=${maxDuration}`
+            let api = `https://194.90.158.74/cgroup90/test2/tar1/api/UserCourse/GetByDurationRange/${localStorage.getItem("loggedUser")}?minDuration=${minDuration}&maxDuration=${maxDuration}`
             ajaxCall("GET", api, "", durationSCBF, durationECBF);
         }
         else

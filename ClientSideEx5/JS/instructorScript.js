@@ -5,7 +5,7 @@
 })
 
 function GetInstructors() {
-    let api = `https://localhost:7020/api/Instructor`;
+    let api = `https://194.90.158.74/cgroup90/test2/tar1/api/Instructor`;
     ajaxCall("GET", api, "", getISCBF, getIECBF);
 }
 
@@ -36,7 +36,7 @@ function renderInstructors(data) {
         btn.innerText = 'Show more courses of this instructor';
         btn.onclick = function () {
 
-            let api = `https://localhost:7020/api/Instructor/` + instructor.id;
+            let api = `https://194.90.158.74/cgroup90/test2/tar1/api/Instructor/` + instructor.id;
             ajaxCall("GET", api, "", getICSCBF, getICECBF);
 
 

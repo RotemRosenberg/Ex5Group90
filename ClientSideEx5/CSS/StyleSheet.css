@@ -214,3 +214,9 @@ h1 {
     #updateCourseBTN:hover {
         background-color: #45a049;
     }
+#edit {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-evenly;
+}
